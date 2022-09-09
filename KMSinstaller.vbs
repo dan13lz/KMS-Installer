@@ -1,57 +1,52 @@
 ' ==== Script Information Header ====
-' script name:   KMS Installer
+' script name:   KMS_Installer
 ' version:       1.0
 ' date:          08.09.22
 ' autor:         Daniel Zalivakhin
-' description:   Скрипт удаляет KMS файлы, активирует Windows и Office через сервер kms.aamajor.local
+' description:   The script removes KMS files, activates Windows and Office, set KMS server - kms.aamajor.local
 
 ' ==== Script Main Logic ====
-' Включение ручной обработки ошибок
+' Enable manual error handler/Включить ручной обработчик ошибок
 'On Error Resume Next
 
-' Создание объектов оболочки и файловой системы
+' Creating shell and file system objects/Создание объектов оболочки и файловой системы
 Set oShell = CreateObject("wscript.shell")
 Set oFSO = CreateObject("Scripting.Filesystemobject")
 
-' Определение путей служебных папок
+' Defining the paths of service folders/Определение путей служебных папок
 sProgramFiles = oShell.ExpandEnvironmentStrings("%ProgramFiles%")
 sUserProfileDir = oShell.ExpandEnvironmentStrings("D:\Temp")            '%temp%
 
-' Создание журнала работы сценария
+' Creating a script log/Создание журнала работы сценария
 sLogFileName = sUserProfileDir & "\KMSTemp_" 
 Set oLogFile = oFSO.CreateTextFile(sLogFileName & ".log",true)
-oLogFile.WriteLine "========== Script KMS Install started =========="
+oLogFile.WriteLine "========== Script 'KMS_Install' started =========="
 
-oLogFile.WriteLine Date & " " & Time & " "
-
-
-
-
-
+' Поиск файлов на удаление
 Set objShellApp = CreateObject("Shell.Application")
 Set objFolder = objShellApp.NameSpace("D:\")
 Set objFolderItems = objFolder.Items()
 objFolderItems.Filter 64 + 128, "*.txt"
 For Each objItem In objFolderItems
     strList = strList & objItem.Name & vbNewLine
+    oLogFile.WriteLine Date & " " & Time & " - File found: " & objItem.Path
+    WScript.Echo Date & " " & Time & " - File found: " & objItem.Path
 Next
-WScript.Echo "txt file Count:*.txt: " & objFolderItems.Count _
-    & vbNewLine & vbNewLine & strList
-    oLogFile.WriteLine Date & " " & Time & " " & strList
+WScript.Echo Date & " " & Time & " - Files number: " & objFolderItems.Count 
+oLogFile.WriteLine Date & " " & Time & " - Files number: " 
+
+
+
+
+
+
+
+
+
+
+
+' Closing the log file/Закрытие файла журнала
+oLogFile.WriteLine vbCrLf & "======== Script 'KMS_Install' is finished ========"
 WScript.Quit 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-' Закрытие файла журнала
-oLogFile.WriteLine vbCrLf & "======== Script KMS Install is finished ========"
 oLogFile.Close
+gFile.Close
